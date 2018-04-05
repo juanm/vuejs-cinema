@@ -1,13 +1,17 @@
 <template>
   <div id="movie-list">
-    <div v-for="movie in filteredMovies" class="movie"> {{ movie.movie.Title }} </div>
+    <movie-item v-for="movie in filteredMovies" v-bind:movie="movie.movie"> </movie-item>
   </div>
 </template>
 
 <script>
   import genres from '../util/genres';
+  import MovieItem from './MovieItem.vue';
   export default {
       props: ['genre', 'time', 'movies'],
+      components: {
+        MovieItem
+      },
       methods: {
         moviePassesGenreFilter(movie) {
 
@@ -15,14 +19,16 @@
             //No genre filters, return all
             return true;
           }
+         let movieGenres = movie.movie.Genre.split(', ');
 
-          /*For real api data, movie.movie.Genre is actually multiple genres (comma seperated)
-            so as long as one of the entries in the movie.movie.Genre
-            matches one of the items in genre, then we want to show the movie.
-          */
-          let movieGenres = movie.movie.Genre.split(',');
-          let matches = new Set(movieGenres.filter(genre => this.genre.indexOf(genre) > -1));
-          return matches.size >= 1;
+          let matched = true;
+          this.genre.forEach(genre => {
+            if (movieGenres.indexOf(genre) === -1) {
+              matched = false;
+            }
+          });
+
+          return matched;
         },
       },
       computed: {
