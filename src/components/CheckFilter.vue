@@ -12,12 +12,12 @@
         checked: false
       }
     },
-    props: ['title'],
+    props: ['title', 'category'],
     methods: {
       checkFilter() {
         this.checked = !this.checked;
         //event name, following arguments is arbitrary number of payload (type of filter, title, state checked or not)
-        this.$emit('check-filter', 'genre', this.title, this.checked);
+        this.$emit('check-filter', this.category , this.title, this.checked);
       }
     }
   }
