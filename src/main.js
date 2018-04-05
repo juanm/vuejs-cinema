@@ -38,7 +38,8 @@ new Vue({
               {title: 'Austin Power'}
             ]
           }
-      }
+      },
+      props: ['genre', 'time'],
     },
     'movie-filter': {
       data(){
