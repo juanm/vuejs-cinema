@@ -6,8 +6,9 @@ import genres from './util/genres';
 new Vue({
   el: '#app',
   methods: {
-    checkFilter() {
+    checkFilter(category, title, checked) {
       console.log("Root Instance checkFilter");
+      console.log(category, title, checked);
     }
   },
   components: {
@@ -38,9 +39,9 @@ new Vue({
                     </div>
                  </div>`,
       methods: {
-        checkFilter() {
-          console.log('Movie Filter: checkFilter)');
-          this.$emit('check-filter'); //this will send the message to the parent which is the root Vue object
+        checkFilter(category, title, checked) {
+          console.log('Movie Filter: checkFilter');
+          this.$emit('check-filter', category, title, checked); //this will send the message to the parent which is the root Vue object
         },
       },
        // These are only available within movie filter and nowhere else
@@ -59,7 +60,8 @@ new Vue({
             methods: {
               checkFilter() {
                 this.checked = !this.checked;
-                this.$emit('check-filter');
+                //event name, following arguments is arbitrary number of payload (type of filter, title, state checked or not)
+                this.$emit('check-filter', 'genre', this.title, this.checked);
               }
             }
         }
