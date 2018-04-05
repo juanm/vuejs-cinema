@@ -19,7 +19,6 @@
 
       methods: {
         checkFilter(category, title, checked) {
-          console.log('Movie Filter: checkFilter');
           this.$emit('check-filter', category, title, checked); //this will send the message to the parent which is the root Vue object
         },
       },
