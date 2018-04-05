@@ -2,6 +2,8 @@ import Vue from 'vue';
 import './style.scss';
 
 import genres from './util/genres';
+import MovieList from './components/MovieList.vue'
+import MovieFilter from './components/MovieFilter.vue'
 
 new Vue({
   el: '#app',
@@ -26,77 +28,8 @@ new Vue({
     }
   },
   components: {
-    'movie-list': {
-      template: `<div id="movie-list">
-                  <div v-for="movie in filteredMovies" class="movie"> {{ movie.title }} </div>
-                </div>`,
-      data: function (){
-        return {
-            movies: [
-              {title: 'pulp fiction', genre: genres.CRIME},
-              {title: 'Home alone', genre: genres.COMEDY},
-              {title: 'Austin Power', genre: genres.COMEDY}
-            ]
-          }
-      },
-      props: ['genre', 'time'],
-      methods: {
-        moviePassesGenreFilter(movie) {
-
-          if (!this.genre.length) {
-            //No genre filters, return all
-            return true;
-          }
-          return this.genre.find(genre => movie.genre === genre);
-        },
-      },
-      computed: {
-        filteredMovies () {
-          return this.movies.filter(this.moviePassesGenreFilter);
-        }
-      }
-    },
-    'movie-filter': {
-      data(){
-        return {
-          genres
-        }
-      },
-      template: `<div id="movie-filter">
-                    <h2>Filter Results</h2>
-                    <div class="filter-group">
-                      <check-filter v-for="genre in genres" :key="genre.title" v-bind:title="genre" v-on:check-filter="checkFilter"></check-filter>
-                    </div>
-                 </div>`,
-      methods: {
-        checkFilter(category, title, checked) {
-          console.log('Movie Filter: checkFilter');
-          this.$emit('check-filter', category, title, checked); //this will send the message to the parent which is the root Vue object
-        },
-      },
-       // These are only available within movie filter and nowhere else
-      components: {
-        'check-filter': {
-            data() {
-              return {
-                checked: false
-              }
-            },
-            template: `<div v-bind:class="{ 'check-filter': true, active: checked }" v-on:click="checkFilter">
-                          <span class="checkbox"></span>
-                          <span clas="check-filter-title">{{ title }}</span>
-                      </div>`,
-            props: ['title'],
-            methods: {
-              checkFilter() {
-                this.checked = !this.checked;
-                //event name, following arguments is arbitrary number of payload (type of filter, title, state checked or not)
-                this.$emit('check-filter', 'genre', this.title, this.checked);
-              }
-            }
-        }
-      }
-    }
+    MovieList, //Vue knows to map MovieList to movie-MovieList
+    MovieFilter,
   }
 });
 //components allow you to create your own custom html tags in a way
