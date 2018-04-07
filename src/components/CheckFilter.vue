@@ -17,7 +17,7 @@
       checkFilter() {
         this.checked = !this.checked;
         //event name, following arguments is arbitrary number of payload (type of filter, title, state checked or not)
-        this.$emit('check-filter', this.category , this.title, this.checked);
+        this.$bus.$emit('check-filter', this.category , this.title, this.checked);
       }
     }
   }

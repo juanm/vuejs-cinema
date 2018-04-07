@@ -13,6 +13,11 @@ moment.tz.setDefault('UTC'); //overwrite browser timezone (server in UTC)
 //make it available in any component, the $ is convention
 Object.defineProperty(Vue.prototype, '$moment', { get() { return this.$root.moment } });
 
+import { checkFilter } from './util/bus';
+
+const bus = new Vue();
+Object.defineProperty(Vue.prototype, '$bus', { get() { return this.$root.bus } })
+
 new Vue({
   el: '#app',
   data: {
@@ -20,21 +25,11 @@ new Vue({
     genre:[],
     time:[],
     moment,
-    day: moment()
+    day: moment(),
+    bus
   },
   methods: {
-    checkFilter(category, title, checked) {
-      //Add or remove the filter to the genre filter array
-      if (checked) {
-        //Category could be genre or time, so this[genre] or this[time]
-        this[category].push(title);
-      } else {
-        let index = this[category].indexOf(title);
-        if (index > -1) {
-          this[category].splice(index, 1);
-        }
-      }
-    }
+
   },
   components: {
     MovieList, //Vue knows to map MovieList to movie-MovieList
@@ -43,8 +38,9 @@ new Vue({
   created() {
     this.$http.get('/api').then(response => {
       this.movies = response.data;
-    })
+    });
 
+    this.$bus.$on('check-filter', checkFilter.bind(this));
   },
 
 
