@@ -1,5 +1,4 @@
 function checkFilter(category, title, checked) {
-
   //Add or remove the filter to the genre filter array
   if (checked) {
     //Category could be genre or time, so this[genre] or this[time]
@@ -12,4 +11,7 @@ function checkFilter(category, title, checked) {
   }
 }
 
-export { checkFilter };
+function setDay(day) {
+  this.day = day;
+}
+export { checkFilter, setDay };

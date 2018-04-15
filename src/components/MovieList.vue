@@ -1,11 +1,12 @@
 <template>
   <div id="movie-list">
     <div v-if="filteredMovies.length">
-      <movie-item v-for="movie in filteredMovies"
-                  v-bind:movie="movie.movie"
-                  v-bind:sessions="movie.sessions"
-                  v-bind:day="day"
-                  v-bind:time="time">
+      <movie-item v-for="movie in filteredMovies" v-bind:movie="movie.movie">
+        <div class="movie-sessions">
+          <div v-for="session in filteredSessions(movie.sessions)" class="session-time-wrapper">
+            <div class="session-time">{{ formatSessionTime(session.time) }}</div>
+          </div>
+        </div>
       </movie-item>
     </div>
     <div v-else-if="movies.length" class="no-results">
@@ -26,6 +27,7 @@
       components: {
         MovieItem
       },
+
       methods: {
         moviePassesGenreFilter(movie) {
 
@@ -44,8 +46,16 @@
 
           return matched;
         },
-        sessionPassesTimeFilter(session) {
 
+        formatSessionTime(raw) {
+          return this.$moment(raw).format('h:mm A');
+        },
+        filteredSessions(sessions) {
+          return sessions.filter(session => {
+            return this.sessionPassesTimeFilter(session);
+          })
+        },
+        sessionPassesTimeFilter(session) {
           if (!this.day.isSame(this.$moment(session.time), 'day')) {
             return false;
           } else if (this.time.length === 0 || this.time.length === 2) {
@@ -66,7 +76,7 @@
         noResults() {
           let times = this.time.join(', ');
           let genres = this.genre.join(', ');
-          return `No results for ${times}${ times.length && genres.length ? ', ': ' ' } ${genres}`;
+          return `No results for ${this.day.format('ddd DD/MM')}: ${times}${ times.length && genres.length ? ', ': ' ' } ${genres}`;
         }
       },
 

@@ -11,7 +11,7 @@ moment.tz.setDefault('UTC'); //overwrite browser timezone (server in UTC)
 //make it available in any component, the $ is convention
 Object.defineProperty(Vue.prototype, '$moment', { get() { return this.$root.moment } });
 
-import { checkFilter } from './util/bus';
+import { checkFilter, setDay} from './util/bus';
 
 const bus = new Vue();
 Object.defineProperty(Vue.prototype, '$bus', { get() { return this.$root.bus } });
@@ -42,6 +42,7 @@ new Vue({
     });
 
     this.$bus.$on('check-filter', checkFilter.bind(this));
+    this.$bus.$on('set-day', setDay.bind(this));
 
   },
   router
