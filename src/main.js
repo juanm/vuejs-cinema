@@ -25,6 +25,9 @@ const router = new VueRouter({
   routes
 });
 
+import Tooltip from './util/tooltip';
+Vue.use(Tooltip);
+
 new Vue({
   el: '#app',
   data: {
@@ -47,44 +50,3 @@ new Vue({
   },
   router
 });
-
-import { addClass, removeClass } from './util/helpers';
-let mouseOverHandler = function (event) {
-  let tooltip = event.target.nextSibling;
-  addClass(tooltip, 'tooltip-show');
-};
-
-let mouseOutHandler = function (event) {
-  let tooltip = event.target.nextSibling;
-  removeClass(tooltip, 'tooltip-show');
-};
-
-Vue.directive('tooltip', {
-
-  bind(el, bindings) {
-      console.log('el');
-      let span = document.createElement('SPAN');
-      let text = document.createTextNode('Seats available: 200');
-      span.appendChild(text);
-      addClass(span, 'tooltip');
-      el.appendChild(span);
-
-      let div = el.getElementsByTagName('DIV')[0];
-      div.addEventListener('mouseover', mouseOverHandler);
-      div.addEventListener('mouseout', mouseOutHandler);
-      div.addEventListener('touchStart', mouseOverHandler);
-      div.addEventListener('touchend', mouseOutHandler);
-  },
-
-  unbind(el) {
-    let div = el.getElementsByTagName('DIV')[0];
-    div.removeEventListener('mouseover', mouseOverHandler);
-    div.removeEventListener('mouseout', mouseOutHandler);
-    div.removeEventListener('touchStart', mouseOverHandler);
-    div.removeEventListener('touchend', mouseOutHandler);
-  }
-
-});
-
-//components allow you to create your own custom html tags in a way
-//Components are sort of subclasses of Vue (mini instance of view)
